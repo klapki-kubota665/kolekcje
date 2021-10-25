@@ -1,6 +1,6 @@
 package tb.soft;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Program: Aplikacja działająca w oknie konsoli, która umożliwia testowanie 
@@ -21,9 +21,10 @@ public class PersonConsoleApp {
 			"    M E N U   G Ł Ó W N E  \n" +
 			"1 - Podaj dane nowej osoby \n" +
 			"2 - Usuń dane osoby        \n" +
-			"3 - Modyfikuj dane osoby   \n" +
+			"3 - Modyfikuj dane osoby ArrayList  \n" +
 			"4 - Wczytaj dane z pliku   \n" +
 			"5 - Zapisz dane do pliku   \n" +
+			"6 - Modyfikuj dane osoby LinkedList \n" +
 			"0 - Zakończ program        \n";	
 	
 	private static final String CHANGE_MENU = 
@@ -54,9 +55,14 @@ public class PersonConsoleApp {
 	/*
 	 *  Referencja do obiektu, który zawiera dane aktualnej osoby.
 	 */
-	private Person currentPerson = null;
-	
-	
+	//private Person currentPerson = null;
+	private ArrayList<Person> arrayPersons = new ArrayList<>();
+	private LinkedList<Person> linkedPersons = new LinkedList<>();
+	//private HashSet<Person> hashsetPersons = null;
+	//private TreeSet<Person> treeSetPersons = null;
+	//private HashMap<String, Person> hashMapPersons = null;
+	//private TreeMap<String, Person> treeMapPersons = null;
+
 	/*
 	 *  Metoda runMainLoop wykonuje główną pętlę aplikacji.
 	 *  UWAGA: Ta metoda zawiera nieskończoną pętlę,
@@ -68,38 +74,59 @@ public class PersonConsoleApp {
 
 		while (true) {
 			UI.clearConsole();
-			showCurrentPerson();
+			//showCurrentPerson();
 
 			try {
+				Scanner scan = new Scanner(System.in);
 				switch (UI.enterInt(MENU + "==>> ")) {
 				case 1:
 					// utworzenie nowej osoby
-					currentPerson = createNewPerson();
+					Person p = createNewPerson();
+					arrayPersons.add(p);
+					linkedPersons.add(p);
 					break;
 				case 2:
 					// usunięcie danych aktualnej osoby.
-					currentPerson = null;
+					UI.printInfoMessage("Usuń osobę na zadanej pozycji");
+					int f = scan.nextInt();
+					arrayPersons.remove(f);
+					linkedPersons.remove(f);
 					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
 					break;
 				case 3:
 					// zmiana danych dla aktualnej osoby
-					if (currentPerson == null) throw new PersonException("Żadna osoba nie została utworzona.");
-					changePersonData(currentPerson);
+					//Scanner scan = new Scanner(System.in);
+					if (arrayPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
+					UI.printInfoMessage("Zmień dane dla osoby na zadanej pozycji");
+					int e = scan.nextInt();
+					changePersonData(arrayPersons.get(e));
+					//changePersonData(linkedPersons.get(e));
+					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
 					break;
 				case 4: {
 					// odczyt danych z pliku tekstowego.
+					//Scanner scan = new Scanner(System.in);
 					String file_name = UI.enterString("Podaj nazwę pliku: ");
-					currentPerson = Person.readFromFile(file_name);
+					arrayPersons.add(Person.readFromFile(file_name));
 					UI.printInfoMessage("Dane aktualnej osoby zostały wczytane z pliku " + file_name);
 				}
 					break;
 				case 5: {
 					// zapis danych aktualnej osoby do pliku tekstowego 
 					String file_name = UI.enterString("Podaj nazwę pliku: ");
-					Person.printToFile(file_name, currentPerson);
+					Person.printToFile(file_name, arrayPersons.get(scan.nextInt()));
 					UI.printInfoMessage("Dane aktualnej osoby zostały zapisane do pliku " + file_name);
+					break;
 				}
-
+				case 6:
+					// zmiana danych dla aktualnej osoby
+					//Scanner scan = new Scanner(System.in);
+					if (arrayPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
+					UI.printInfoMessage("Zmień dane dla osoby na zadanej pozycji");
+					int g = scan.nextInt();
+					//changePersonData(arrayPersons.get(e));
+					changePersonData(linkedPersons.get(g));
+					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
 					break;
 				case 0:
 					// zakończenie działania programu
@@ -122,7 +149,11 @@ public class PersonConsoleApp {
 	 *  pamiętanej w zmiennej currentPerson.
 	 */
 	void showCurrentPerson() {
-		showPerson(currentPerson);
+		if (arrayPersons != null) {
+			Scanner scan = new Scanner(System.in);
+			showPerson(arrayPersons.get(scan.nextInt()));
+			scan.close();
+		}
 	} 
 
 	

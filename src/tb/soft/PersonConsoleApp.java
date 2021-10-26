@@ -25,6 +25,12 @@ public class PersonConsoleApp {
 			"4 - Wczytaj dane z pliku   \n" +
 			"5 - Zapisz dane do pliku   \n" +
 			"6 - Modyfikuj dane osoby LinkedList \n" +
+					"7 Pokaż zawartość ArrayList \n" +
+					"8 Pokaż zawartość LinkedList \n" +
+					"9 Pokaz zawartość HashSet \n" +
+					"10 Pokaż zawartość TreeSet \n" +
+					"11 Pokaż zawartość HashMap \n" +
+					"12 Pokaz zawartość TreeMap \n" +
 			"0 - Zakończ program        \n";	
 	
 	private static final String CHANGE_MENU = 
@@ -58,10 +64,10 @@ public class PersonConsoleApp {
 	//private Person currentPerson = null;
 	private ArrayList<Person> arrayPersons = new ArrayList<>();
 	private LinkedList<Person> linkedPersons = new LinkedList<>();
-	//private HashSet<Person> hashsetPersons = null;
-	//private TreeSet<Person> treeSetPersons = null;
-	//private HashMap<String, Person> hashMapPersons = null;
-	//private TreeMap<String, Person> treeMapPersons = null;
+	private HashSet<Person> hashsetPersons = new HashSet<>();
+	private TreeSet<Person> treeSetPersons = new TreeSet<>();
+	private HashMap<String, Person> hashMapPersons = new HashMap<>();
+	private TreeMap<String, Person> treeMapPersons = new TreeMap<>();
 
 	/*
 	 *  Metoda runMainLoop wykonuje główną pętlę aplikacji.
@@ -84,6 +90,10 @@ public class PersonConsoleApp {
 					Person p = createNewPerson();
 					arrayPersons.add(p);
 					linkedPersons.add(p);
+					hashsetPersons.add(p);
+					treeSetPersons.add(p);
+					hashMapPersons.put(p.getLastName(), p);
+					treeMapPersons.put(p.getLastName(), p);
 					break;
 				case 2:
 					// usunięcie danych aktualnej osoby.
@@ -91,6 +101,8 @@ public class PersonConsoleApp {
 					int f = scan.nextInt();
 					arrayPersons.remove(f);
 					linkedPersons.remove(f);
+					Iterator iterator = hashsetPersons.iterator();
+
 					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
 					break;
 				case 3:
@@ -100,12 +112,10 @@ public class PersonConsoleApp {
 					UI.printInfoMessage("Zmień dane dla osoby na zadanej pozycji");
 					int e = scan.nextInt();
 					changePersonData(arrayPersons.get(e));
-					//changePersonData(linkedPersons.get(e));
 					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
 					break;
 				case 4: {
 					// odczyt danych z pliku tekstowego.
-					//Scanner scan = new Scanner(System.in);
 					String file_name = UI.enterString("Podaj nazwę pliku: ");
 					arrayPersons.add(Person.readFromFile(file_name));
 					UI.printInfoMessage("Dane aktualnej osoby zostały wczytane z pliku " + file_name);
@@ -118,17 +128,48 @@ public class PersonConsoleApp {
 					UI.printInfoMessage("Dane aktualnej osoby zostały zapisane do pliku " + file_name);
 					break;
 				}
-				case 6:
+				case 6:{
 					// zmiana danych dla aktualnej osoby
 					//Scanner scan = new Scanner(System.in);
 					if (arrayPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
 					UI.printInfoMessage("Zmień dane dla osoby na zadanej pozycji");
 					int g = scan.nextInt();
-					//changePersonData(arrayPersons.get(e));
 					changePersonData(linkedPersons.get(g));
 					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
 					break;
-				case 0:
+				}
+				case 7:{
+					System.out.println("Osoby:\n");
+					for (Person arrayListPerson : arrayPersons){
+						showPerson(arrayListPerson);
+					}
+				}
+				case 8:{
+					for (Person linkedListPerson : linkedPersons){
+						showPerson(linkedListPerson);
+					}
+				}
+				case 9:{
+					for (Person hashsetPerson : hashsetPersons){
+						showPerson(hashsetPerson);
+					}
+				}
+				case 10:{
+					for (Person treesetPerson : treeSetPersons){
+						showPerson(treesetPerson);
+					}
+				}
+				case 11:{
+					for(Person hashmapPerson : hashMapPersons.values()){
+						showPerson(hashmapPerson);
+					}
+				}
+				case 12:{
+					for(Person treeMapPerson : treeMapPersons.values()) {
+						showPerson(treeMapPerson);
+					}
+				}
+					case 0:
 					// zakończenie działania programu
 					UI.printInfoMessage("\nProgram zakończył działanie!");
 					System.exit(0);

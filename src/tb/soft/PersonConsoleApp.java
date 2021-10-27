@@ -20,10 +20,18 @@ public class PersonConsoleApp {
 	private static final String MENU = 
 			"    M E N U   G Ł Ó W N E  \n" +
 			"1 - Podaj dane nowej osoby \n" +
-			"2 - Usuń dane osoby        \n" +
+			"2 - Usuń osobę ArrayList        \n" +
+					"13 Usun osobę LinkedList \n" +
+					"14 Usun osobę HashSet \n" +
+					"15 Usun osobę TreeSet \n" +
+					"16 Usun osobę HashMap \n" +
+					"17 Usun osobę TreeMap \n" +
 			"3 - Modyfikuj dane osoby ArrayList  \n" +
-			"4 - Wczytaj dane z pliku   \n" +
-			"5 - Zapisz dane do pliku   \n" +
+					"6 Modyfikuj dane osoby LInkedList  \n" +
+					"18 Modyfikuj dane osoby HashSet  \n" +
+					"19 Modyfikuj dane osoby TreeSet  \n" +
+					"20 Modyfikuj dane osoby HashMap  \n" +
+					"21 Modyfikuj dane osoby TreeMap  \n" +
 			"6 - Modyfikuj dane osoby LinkedList \n" +
 					"7 Pokaż zawartość ArrayList \n" +
 					"8 Pokaż zawartość LinkedList \n" +
@@ -31,7 +39,7 @@ public class PersonConsoleApp {
 					"10 Pokaż zawartość TreeSet \n" +
 					"11 Pokaż zawartość HashMap \n" +
 					"12 Pokaz zawartość TreeMap \n" +
-			"0 - Zakończ program        \n";	
+			"0 - Zakończ program        \n";
 	
 	private static final String CHANGE_MENU = 
 			"   Co zmienić?     \n" + 
@@ -85,51 +93,96 @@ public class PersonConsoleApp {
 			try {
 				Scanner scan = new Scanner(System.in);
 				switch (UI.enterInt(MENU + "==>> ")) {
-				case 1:
+				case 1:{
 					// utworzenie nowej osoby
 					Person p = createNewPerson();
-					arrayPersons.add(p);
-					linkedPersons.add(p);
-					hashsetPersons.add(p);
-					treeSetPersons.add(p);
-					hashMapPersons.put(p.getLastName(), p);
-					treeMapPersons.put(p.getLastName(), p);
-					break;
-				case 2:
-					// usunięcie danych aktualnej osoby.
-					UI.printInfoMessage("Usuń osobę na zadanej pozycji");
-					int f = scan.nextInt();
-					arrayPersons.remove(f);
-					linkedPersons.remove(f);
-					Iterator iterator = hashsetPersons.iterator();
+					if (p!= null) {
+						arrayPersons.add(p);
+						linkedPersons.add(p);
+						hashsetPersons.add(p);
+						treeSetPersons.add(p);
+						hashMapPersons.put(p.getLastName(), p);
+						treeMapPersons.put(p.getLastName(), p);
+					}
 
+					break;
+				}
+				case 2:{
+					// remove Array
+					UI.printInfoMessage("Usuń osobę na zadanej pozycji");
+					arrayPersons.remove(scan.nextInt());
 					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
 					break;
+				}
+				case 13:{//remove Linked
+					UI.printInfoMessage("Usuń osobę na zadanej pozycji");
+					linkedPersons.remove(scan.nextInt());
+					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
+					break;
+				}
+				case 14: {//remove HashSet
+					UI.printInfoMessage("Usuń osobę po nazwisku");
+					Iterator<Person> iterator = hashsetPersons.iterator();
+					while(iterator.hasNext()) {
+						Person e = iterator.next();
+						if (e.getLastName().equals( scan.next())) {
+							iterator.remove();
+							break;
+						}
+					}
+					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
+					break;
+				}
+				case 15: {//remove TreeSet
+					UI.printInfoMessage("Usuń osobę po nazwisku");
+					Iterator<Person> iterator = treeSetPersons.iterator();
+					while(iterator.hasNext()) {
+						Person e = iterator.next();
+						if (e.getLastName().equals( scan.next())) {
+							iterator.remove();
+							break;
+						}
+					}
+					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
+					break;
+				}
+				case 16: {//remove HashMap
+					UI.printInfoMessage("Usuń osobę po nazwisku");
+					hashMapPersons.remove(scan.next());
+					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
+					break;
+				}
+				case 17: {//remove TreeMap
+					UI.printInfoMessage("Usuń osobę po nazwisku");
+					treeMapPersons.remove(scan.next());
+					UI.printInfoMessage("Dane aktualnej osoby zostały usunięte");
+					break;
+				}
+
 				case 3:
-					// zmiana danych dla aktualnej osoby
-					//Scanner scan = new Scanner(System.in);
+					// zmiana danych dla aktualnej osoby Array
 					if (arrayPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
 					UI.printInfoMessage("Zmień dane dla osoby na zadanej pozycji");
 					int e = scan.nextInt();
 					changePersonData(arrayPersons.get(e));
 					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
 					break;
-				case 4: {
+				/*case 4: {
 					// odczyt danych z pliku tekstowego.
 					String file_name = UI.enterString("Podaj nazwę pliku: ");
 					arrayPersons.add(Person.readFromFile(file_name));
 					UI.printInfoMessage("Dane aktualnej osoby zostały wczytane z pliku " + file_name);
-				}
 					break;
-				case 5: {
+				}*/
+				/*case 5: {
 					// zapis danych aktualnej osoby do pliku tekstowego 
 					String file_name = UI.enterString("Podaj nazwę pliku: ");
 					Person.printToFile(file_name, arrayPersons.get(scan.nextInt()));
 					UI.printInfoMessage("Dane aktualnej osoby zostały zapisane do pliku " + file_name);
 					break;
-				}
+				}*/
 				case 6:{
-					// zmiana danych dla aktualnej osoby
+					// zmiana danych Linked
 					//Scanner scan = new Scanner(System.in);
 					if (arrayPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
 					UI.printInfoMessage("Zmień dane dla osoby na zadanej pozycji");
@@ -138,36 +191,82 @@ public class PersonConsoleApp {
 					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
 					break;
 				}
-				case 7:{
+				case 18:{// zmiana danych hashset
+					if (hashsetPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
+					UI.printInfoMessage("Zmień dane dla osoby o zadanym nazwisku");
+					Iterator<Person> iterator = hashsetPersons.iterator();
+					while(iterator.hasNext()){
+						if(iterator.next().getLastName().equals(scan.next())){
+							changePersonData(iterator.next());
+							break;
+						}
+					}
+					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
+					break;
+				}
+				case 19:{// zmiana danych treeset
+					if (treeSetPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
+					UI.printInfoMessage("Zmień dane dla osoby o zadanym nazwisku");
+					Iterator<Person> iterator = treeSetPersons.iterator();
+					while(iterator.hasNext()){
+						if(iterator.next().getLastName().equals(scan.next())){
+							changePersonData(iterator.next());
+							break;
+						}
+					}
+					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
+					break;
+				}
+				case 20:{// zmiana danych hashmap
+					if (hashMapPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
+					UI.printInfoMessage("Zmień dane dla osoby o zadanym nazwisku");
+					changePersonData(hashMapPersons.get(scan.next()));
+					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
+					break;
+				}
+				case 21:{// zmiana danych treemap
+					if (treeMapPersons.size()==0) throw new PersonException("Żadna osoba nie została utworzona.");
+					UI.printInfoMessage("Zmień dane dla osoby o zadanym nazwisku");
+					changePersonData(treeMapPersons.get(scan.next()));
+					UI.printInfoMessage("Dane aktualnej osoby zostały zmienione");
+					break;
+				}
+				case 7:{//show
 					System.out.println("Osoby:\n");
 					for (Person arrayListPerson : arrayPersons){
 						showPerson(arrayListPerson);
 					}
+					break;
 				}
-				case 8:{
+				case 8:{//show
 					for (Person linkedListPerson : linkedPersons){
 						showPerson(linkedListPerson);
 					}
+					break;
 				}
-				case 9:{
+				case 9:{//show
 					for (Person hashsetPerson : hashsetPersons){
 						showPerson(hashsetPerson);
 					}
+					break;
 				}
-				case 10:{
+				case 10:{//show
 					for (Person treesetPerson : treeSetPersons){
 						showPerson(treesetPerson);
 					}
+					break;
 				}
-				case 11:{
+				case 11:{//show
 					for(Person hashmapPerson : hashMapPersons.values()){
 						showPerson(hashmapPerson);
 					}
+					break;
 				}
-				case 12:{
+				case 12:{//show
 					for(Person treeMapPerson : treeMapPersons.values()) {
 						showPerson(treeMapPerson);
 					}
+					break;
 				}
 					case 0:
 					// zakończenie działania programu
@@ -183,8 +282,9 @@ public class PersonConsoleApp {
 			}
 		} // koniec pętli while
 	}
-	
-	
+
+
+
 	/*
 	 *  Metoda wyświetla w oknie konsoli dane aktualnej osoby 
 	 *  pamiętanej w zmiennej currentPerson.
